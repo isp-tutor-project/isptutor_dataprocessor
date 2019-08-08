@@ -92,7 +92,7 @@ for doc in docs:
             elif step["type"] == "QUIZ":
                 stepCsv += step["title"] + ","
                 stepCsv += step["selected"] + ","
-                stepCsv += step["isCorrect"] + ","
+                stepCsv += str(step["isCorrect"]) + ","
                 stepCsv += "\n"
             else:
                 print("error: type doesn't exist")
