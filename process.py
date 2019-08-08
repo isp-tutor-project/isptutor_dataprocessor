@@ -90,8 +90,8 @@ for doc in docs:
                 stepCsv += step["link"] + ","
                 stepCsv += "\n"
             elif step["type"] == "QUIZ":
-                stepCsv += step["title"] + ","
-                stepCsv += step["selected"] + ","
+                stepCsv += '"' + step["title"] + '"' + ","
+                stepCsv += '"' + step["selected"] + '"' + ","
                 stepCsv += str(step["isCorrect"]) + ","
                 stepCsv += "\n"
             else:
