@@ -10,22 +10,31 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-if not os.path.exists("steps"):
-    os.mkdir("steps")
+if not os.path.exists("hypo"):
+    os.mkdir("hypo")
+if not os.path.exists("hypo/steps"):
+    os.mkdir("hypo/steps")
+if not os.path.exists("brm"):
+    os.mkdir("brm")
+if not os.path.exists("brm/steps"):
+    os.mkdir("brm/steps")
 
 # constants
-MAX_NUM_NODES = 5
-COLLECTION_ID = "study2"
+MAX_NUM_HYPO_NODES = 5
+COLLECTION_ID = "STUDY2"
 
 # making title line
-csv = "HPMOD,Student User Name,initPredict,finalPredict,"
-for i in range(MAX_NUM_NODES):
-    csv += "node_" + str(i+1) + ","
-for i in range(MAX_NUM_NODES):
-    csv += "arrowLabel_" + str(i+1) + ","
-for i in range(MAX_NUM_NODES):
-    csv += "direction_" + str(i+1) + ","
-csv += "\n"
+hypoCsv = "HPMOD,Student User Name,firstPredict,secondPredict,finalPredict,"
+for i in range(MAX_NUM_HYPO_NODES):
+    hypoCsv += "node_" + str(i+1) + ","
+for i in range(MAX_NUM_HYPO_NODES):
+    hypoCsv += "arrowLabel_" + str(i+1) + ","
+for i in range(MAX_NUM_HYPO_NODES):
+    hypoCsv += "direction_" + str(i+1) + ","
+hypoCsv += "\n"
+
+# brm title line
+brmCsv = "BRMMOD,Student User Name,type,info\n"
 
 # filling in data
 docs = db.collection(COLLECTION_ID).get()
@@ -33,29 +42,30 @@ for doc in docs:
     docDict = doc.to_dict()
     if "hypo" in docDict:
         hypoDict = json.loads(docDict["hypo"])
-        csv += "HPMOD,"
-        csv += doc.id + ","
-        csv += hypoDict["initialPrediction"] + ","
+        hypoCsv += "HPMOD,"
+        hypoCsv += doc.id + ","
+        hypoCsv += hypoDict["firstPrediction"] + ","
+        hypoCsv += hypoDict["secondPrediction"] + ","
         nodes = hypoDict["nodes"]
         arrowLabels = hypoDict["arrowLabels"]
         directions = hypoDict["directions"]
-        csv += directions[-1] + ","
-        for i in range(MAX_NUM_NODES):
+        hypoCsv += directions[-1] + ","
+        for i in range(MAX_NUM_HYPO_NODES):
             if i >= len(nodes):
-                csv += "N/A,"
+                hypoCsv += "N/A,"
             else:
-                csv += nodes[i] + ","
-        for i in range(MAX_NUM_NODES):
+                hypoCsv += nodes[i] + ","
+        for i in range(MAX_NUM_HYPO_NODES):
             if i >= len(arrowLabels):
-                csv += "N/A,"
+                hypoCsv += "N/A,"
             else:
-                csv += arrowLabels[i] + ","
-        for i in range(MAX_NUM_NODES):
+                hypoCsv += arrowLabels[i] + ","
+        for i in range(MAX_NUM_HYPO_NODES):
             if i >= len(directions):
-                csv += "N/A,"
+                hypoCsv += "N/A,"
             else:
-                csv += directions[i] + ","
-        csv += "\n"
+                hypoCsv += directions[i] + ","
+        hypoCsv += "\n"
         # For recording steps in steps folder
         stepCsv = "action,object,index,info,date,time\n"
         steps = hypoDict["steps"]
@@ -66,10 +76,30 @@ for doc in docs:
             stepCsv += step["info"] + ","
             stepCsv += step["timestamp"] + ","
             stepCsv += "\n"
-        stepFile = open("steps/" + doc.id + ".csv", "w")
+        stepFile = open("hypo/steps/" + doc.id + ".csv", "w")
         stepFile.write(stepCsv)
         stepFile.close()
 
-f = open("hypo.csv", "w")
-f.write(csv)
+    if "brm" in docDict:
+        brmDict = json.loads(docDict["brm"])
+        stepCsv = "type,title,selected,isCorrect\n"
+        steps = brmDict
+        for step in steps:
+            stepCsv += step["type"] + ","
+            if step["type"] == "LINK":
+                stepCsv += step["link"] + ","
+                stepCsv += "\n"
+            elif step["type"] == "QUIZ":
+                stepCsv += step["title"] + ","
+                stepCsv += step["selected"] + ","
+                stepCsv += step["isCorrect"] + ","
+                stepCsv += "\n"
+            else:
+                print("error: type doesn't exist")
+            stepFile = open("brm/steps/" + doc.id + ".csv", "w")
+            stepFile.write(stepCsv)
+            stepFile.close()
+
+f = open("hypo/hypo.csv", "w")
+f.write(hypoCsv)
 f.close()

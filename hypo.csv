@@ -1,4 +1,0 @@
-HPMOD,Student User Name,initPredict,finalPredict,node_1,node_2,node_3,node_4,node_5,arrowLabel_1,arrowLabel_2,arrowLabel_3,arrowLabel_4,arrowLabel_5,direction_1,direction_2,direction_3,direction_4,direction_5,
-HPMOD,richard,increase,increase,Evaporation rate of water,Amount of water in jar,Amount crystal growth on string,N/A,N/A,Definition,Cause: Electric force,Correlation,N/A,N/A,increase,decrease,increase,N/A,N/A,
-HPMOD,richard2,increase,increase,Kinetic energy of water molecules,Amount crystal growth on string,N/A,N/A,N/A,Cause: Electric force,Correlation,N/A,N/A,N/A,increase,increase,N/A,N/A,N/A,
-HPMOD,richard3,increase,increase,Amount of water in jar,Concentration of Na+ and Cl- in water,Amount crystal growth on string,N/A,N/A,Definition,Cause: Energy to escape electric forces,Cause: Electric force,N/A,N/A,increase,decrease,increase,N/A,N/A,
