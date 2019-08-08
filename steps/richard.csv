@@ -1,0 +1,11 @@
+action,object,index,info,date,time
+NODE_CREATE,Amount of water in jar,2,N/A,7/17/2019, 11:47:30 AM,
+NODE_CREATE,Evaporation rate of water,1,N/A,7/17/2019, 11:47:32 AM,
+ARROW_CREATE,Water temperature::Evaporation rate of water,-2::1,N/A,7/17/2019, 11:47:34 AM,
+ARROW_CREATE,Evaporation rate of water::Amount of water in jar,1::2,N/A,7/17/2019, 11:47:37 AM,
+ARROW_CREATE,Amount of water in jar::Amount crystal growth on string,2::-1,N/A,7/17/2019, 11:47:39 AM,
+ARROW_CHANGE_LABEL,Water temperature::Evaporation rate of water,-2::1,Definition,7/17/2019, 11:47:40 AM,
+ARROW_CHANGE_LABEL,Evaporation rate of water::Amount of water in jar,1::2,Cause: Electric force,7/17/2019, 11:47:42 AM,
+ARROW_CHANGE_LABEL,Amount of water in jar::Amount crystal growth on string,2::-1,Correlation,7/17/2019, 11:47:44 AM,
+NODE_CHANGE_DIRECTION,Evaporation rate of water,1,increase,7/17/2019, 11:47:53 AM,
+NODE_CHANGE_DIRECTION,Amount of water in jar,2,decrease,7/17/2019, 11:47:55 AM,

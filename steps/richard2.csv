@@ -1,0 +1,7 @@
+action,object,index,info,date,time
+NODE_CREATE,Kinetic energy of water molecules,0,N/A,7/17/2019, 2:06:46 PM,
+ARROW_CREATE,Water temperature::Kinetic energy of water molecules,-2::0,N/A,7/17/2019, 2:06:49 PM,
+ARROW_CREATE,Kinetic energy of water molecules::Amount crystal growth on string,0::-1,N/A,7/17/2019, 2:06:51 PM,
+ARROW_CHANGE_LABEL,Water temperature::Kinetic energy of water molecules,-2::0,Cause: Electric force,7/17/2019, 2:06:53 PM,
+ARROW_CHANGE_LABEL,Kinetic energy of water molecules::Amount crystal growth on string,0::-1,Correlation,7/17/2019, 2:06:55 PM,
+NODE_CHANGE_DIRECTION,Kinetic energy of water molecules,0,increase,7/17/2019, 2:06:57 PM,
