@@ -1,5 +1,6 @@
 import os
 import json
+import re
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -23,7 +24,7 @@ if not os.path.exists("brm/steps"):
 
 # constants
 MAX_NUM_HYPO_NODES = 5
-COLLECTION_ID = "STUDY3"
+COLLECTION_ID = "STUDY2"
 
 #rq title line
 rqCsv = "RQMOD,Student User Name,selectedArea,selectedTopic,selectedVariable\n"
@@ -103,8 +104,8 @@ for doc in docs:
                 stepCsv += step["link"] + ","
                 stepCsv += "\n"
             elif step["type"] == "QUIZ":
-                stepCsv += '"' + step["title"] + '"' + ","
-                stepCsv += '"' + step["selected"] + '"' + ","
+                stepCsv += '"' + re.sub("\s+", " ", step["title"].replace('"', "'")) + '"' + ","
+                stepCsv += '"' + step["selected"].replace('"', '""') + '"' + ","
                 stepCsv += str(step["isCorrect"]) + ","
                 stepCsv += "\n"
             else:
