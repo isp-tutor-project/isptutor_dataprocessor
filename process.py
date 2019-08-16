@@ -10,6 +10,8 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
+if not os.path.exists("rqted"):
+    os.mkdir("rqted")
 if not os.path.exists("hypo"):
     os.mkdir("hypo")
 if not os.path.exists("hypo/steps"):
@@ -21,9 +23,11 @@ if not os.path.exists("brm/steps"):
 
 # constants
 MAX_NUM_HYPO_NODES = 5
-COLLECTION_ID = "STUDY2"
+COLLECTION_ID = "STUDY3"
 
-# making title line
+#rq title line
+rqCsv = "RQMOD,Student User Name,selectedArea,selectedTopic,selectedVariable\n"
+# hypo title line
 hypoCsv = "HPMOD,Student User Name,firstPredict,secondPredict,finalPredict,"
 for i in range(MAX_NUM_HYPO_NODES):
     hypoCsv += "node_" + str(i+1) + ","
@@ -33,13 +37,21 @@ for i in range(MAX_NUM_HYPO_NODES):
     hypoCsv += "direction_" + str(i+1) + ","
 hypoCsv += "\n"
 
-# brm title line
-brmCsv = "BRMMOD,Student User Name,type,info\n"
-
 # filling in data
 docs = db.collection(COLLECTION_ID).get()
 for doc in docs:
     docDict = doc.to_dict()
+    # rq
+    if "rqted" in docDict:
+        rqDict = json.loads(docDict["rqted"])
+        rqCsv += "RQMOD,"
+        rqCsv += doc.id + ","
+        rqCsv += str(rqDict["moduleState"]["selectedArea"]["index"]) + ","
+        rqCsv += str(rqDict["moduleState"]["selectedTopic"]["index"]) + ","
+        rqCsv += str(rqDict["moduleState"]["selectedVariable"]["index"]) + ","
+        rqCsv += "\n"
+
+    # hypo
     if "hypo" in docDict:
         hypoDict = json.loads(docDict["hypo"])
         hypoCsv += "HPMOD,"
@@ -80,6 +92,7 @@ for doc in docs:
         stepFile.write(stepCsv)
         stepFile.close()
 
+    # brm
     if "brm" in docDict:
         brmDict = json.loads(docDict["brm"])
         stepCsv = "type,title,selected,isCorrect\n"
@@ -100,6 +113,9 @@ for doc in docs:
             stepFile.write(stepCsv)
             stepFile.close()
 
+f = open("rqted/rq.csv", "w")
+f.write(rqCsv)
+f.close()
 f = open("hypo/hypo.csv", "w")
 f.write(hypoCsv)
 f.close()
