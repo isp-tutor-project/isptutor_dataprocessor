@@ -24,7 +24,7 @@ if not os.path.exists("brm/steps"):
 
 # constants
 MAX_NUM_HYPO_NODES = 5
-COLLECTION_ID = "STUDY2"
+COLLECTION_ID = "STUDY3"
 
 #rq title line
 rqCsv = "RQMOD,Student User Name,selectedArea,selectedTopic,selectedVariable\n"
