@@ -92,18 +92,45 @@ def mk_hypo_hdr():
         hypo_hdr += "arrowLabel_" + str(i+1) + ","
     for i in range(MAX_NUM_HYPO_NODES):
         hypo_hdr += "direction_" + str(i+1) + ","
-    hypo_hdr = hypo_hdr.rstrip(',')
-    hypo_hdr += "\n"
+    hypo_hdr += "notes\n"
     return hypo_hdr
 
 
 def write_hypo_data(fp, class_code, which_hypo, data):
     userID = data['userID']
     condition = data['condition']
-    line = '"HPMOD","%s",' % userID
     hypo_data = data[which_hypo + 'Hypo']
-    # prediction = hypo_data['']
+    line = '"HPMOD","%s","%s","%s",' % \
+        (userID, hypo_data["currentPrediction"], hypo_data["currentPredictionValue"]) 
+    nodes = hypo_data['nodes']
+    arrow_labels = hypo_data['arrowLabels']
+    directions = hypo_data['directions']
+    # print(len(nodes), nodes)
+    # print(len(arrow_labels), arrow_labels)
+    # print(len(directions), directions)
+    # sys.exit(0)
+    for i in range(MAX_NUM_HYPO_NODES):
+        if i >= len(nodes):
+            line += '"N/A",'
+        else:
+            line += '"%s",' % nodes[i]
+    for i in range(MAX_NUM_HYPO_NODES):
+        if i >= len(arrow_labels):
+            line += '"N/A",'
+        else:
+            line += '"%s",' % arrow_labels[i]
+    for i in range(MAX_NUM_HYPO_NODES):
+        if i >= len(directions):
+            line += '"N/A",'
+        else:
+            line += '"%s",' % directions[i]
+    notes = hypo_data.get('notes', 'N/A')
+    line += '"%s"\n' % notes.replace('\n', ' ')
+    # line = line.rstrip(',')
+    # line += '\n';
+    fp.write(line)
 
+    # create a seperate *hypo_steps/userID.csv file for the student
     steps_file = os.path.join(class_code, condition, "%sHypo_steps" % which_hypo, "%s.csv" % userID)
     steps_hdr = "action,object,index,info,date,time\n"
 
@@ -130,21 +157,23 @@ def get_condition_data(class_ref, class_code, condition):
     cond_dir = os.path.join(class_code, condition)
     stud_file = os.path.join(cond_dir, "students.csv")
     rq_file = os.path.join(cond_dir, "rqted.csv")
-    init_hypo_file = os.path.join(cond_dir, "initHypo.csv")
-    opp_hypo_file = os.path.join(cond_dir, "oppositeHypo.csv")
+    initial_hypo_file = os.path.join(cond_dir, "initialHypo.csv")
+    opposite_hypo_file = os.path.join(cond_dir, "oppositeHypo.csv")
     final_hypo_file = os.path.join(cond_dir, "finalHypo.csv")
     stud_hdr = "Student User Name,preTestScore,condition,firstPrediction,secondPrediction\n"
     rq_hdr = "RQMOD,Student User Name,selectedArea,selectedTopic,selectedVariable\n"
     hypo_hdr = mk_hypo_hdr()
-    init_hypo_fp = None
-    opp_hypo_fp = None
+    initial_hypo_fp = None
+    opposite_hypo_fp = None
     final_hypo_fp = open(final_hypo_file, "w")
     with open(stud_file, "w") as stud_fp, \
          open(rq_file, "w") as rq_fp:
         if "initial" in CONDITION_HYPOS[condition]:
-            init_hypo_fp = open(init_hypo_file, "w")
+            initial_hypo_fp = open(initial_hypo_file, "w")
+            initial_hypo_fp.write(hypo_hdr)
         if "opposite" in CONDITION_HYPOS[condition]:
-            opp_hypo_fp = open(opp_hypo_file, "w")
+            opposite_hypo_fp = open(opposite_hypo_file, "w")
+            opposite_hypo_fp.write(hypo_hdr)
         stud_fp.write(stud_hdr)
         rq_fp.write(rq_hdr)
         query = class_ref.where('condition', '==', condition)
@@ -167,16 +196,16 @@ def get_condition_data(class_ref, class_code, condition):
             write_stud_file_rec(stud_fp, data)
             write_rq_rec(rq_fp, data)
             write_brm_steps(class_code, condition, data)
-            if init_hypo_fp:
-                write_hypo_data(init_hypo_fp, class_code, "initial", data)
-            if opp_hypo_fp:
-                write_hypo_data(opp_hypo_fp, class_code, "opposite", data)
+            if initial_hypo_fp:
+                write_hypo_data(initial_hypo_fp, class_code, "initial", data)
+            if opposite_hypo_fp:
+                write_hypo_data(opposite_hypo_fp, class_code, "opposite", data)
+            # all conditions have a final hypo
             write_hypo_data(final_hypo_fp, class_code, "final", data)
-            # print(json.dumps(data['finalHypo'], indent=4, sort_keys=True))
-        if init_hypo_fp:
-            init_hypo_fp.close()
-        if opp_hypo_fp:
-            opp_hypo_fp.close()
+        if initial_hypo_fp:
+            initial_hypo_fp.close()
+        if opposite_hypo_fp:
+            opposite_hypo_fp.close()
     final_hypo_fp.close()
 
 # for which_hypo in CONDITION_HYPOS[condition]:
