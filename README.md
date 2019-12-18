@@ -18,4 +18,5 @@
 ## Running the Script
 1. if your command-line prompt doesn't begin with `(venv)`, type: `source venv/bin/activate`
 2. type: `python3 process2.py CLASS_CODE
+3. the generated output files will reside in `output/CLASS_CODE`
    
