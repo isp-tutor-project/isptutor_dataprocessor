@@ -1,24 +1,21 @@
 # isptutor_dataprocessor
 
-## Instructions for installation
+## Installation Instructions
 
-1. Run 'pip3 install --upgrade firebase-admin'
+1. type: `python3 -m venv venv`
+2. type: `source venv/bin/activate`
+3. type `pip install -r requirements.txt`
+4. if you get a message (either now, or at any point in the future) that a new version of pip is available,
+    type: `pip install --upgrade pip`
+5. generate the keyfile
 
-2. Go to https://console.cloud.google.com/iam-admin/serviceaccounts?authuser=0 in the Cloud Platform Console. Generate a new private key and save the JSON file. Then use the file to initialize the SDK:
-```
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+## Generating the keyfile
+1. Go to https://console.cloud.google.com/iam-admin/serviceaccounts?authuser=0 in the Cloud Platform Console. Generate a new private key and save the JSON file. 
+2. name this file `privatekey.json` and place it in this directory 
+    
+    Reference: https://firebase.google.com/docs/firestore/quickstart?authuser=0
 
-# Use a service account
-cred = credentials.Certificate('path/to/serviceAccount.json')
-firebase_admin.initialize_app(cred)
-
-db = firestore.client()
-```
-Replace 'path/to/serviceAccount.json' with the path to your json file.
-
-3. Run 'python3 process.py'
-
-
-Reference: https://firebase.google.com/docs/firestore/quickstart?authuser=0
+## Running the Script
+1. if your command-line prompt doesn't begin with `(venv)`, type: `source venv/bin/activate`
+2. type: `python3 process2.py CLASS_CODE
+   
