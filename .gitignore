@@ -1,5 +1,6 @@
-privatekey.json
+*.json
 .DS_Store
 /brm/
 /hypo/
 /rqted/
+venv
