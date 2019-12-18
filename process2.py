@@ -10,6 +10,7 @@ from firebase_admin import firestore
 
 # constants
 KEY_FILE = 'privatekey.json'
+OUTPUT_DIR = "output"
 
 # STUDY-SPECFIC constants
 MAX_NUM_HYPO_NODES = 7
@@ -22,10 +23,13 @@ CONDITION_HYPOS = {
 
 
 def mkdirs(class_code):
-    if not os.path.exists(class_code):
-        os.mkdir(class_code)
+    if not os.path.exists(OUTPUT_DIR):
+        os.mkdir(OUTPUT_DIR)
+    class_dir = os.path.join(OUTPUT_DIR, class_code)
+    if not os.path.exists(class_dir):
+        os.mkdir(class_dir)
     for curr_cond in CONDITIONS:
-        curr_cond_dir = os.path.join(class_code, curr_cond)
+        curr_cond_dir = os.path.join(class_dir, curr_cond)
         if not os.path.exists(curr_cond_dir):
             os.mkdir(curr_cond_dir)
         for hypo in CONDITION_HYPOS[curr_cond]:
@@ -157,7 +161,7 @@ def get_collection(private_key_file, class_code):
 
 def get_condition_data(class_ref, class_code, condition):
     print("condition: {}".format(condition))
-    cond_dir = os.path.join(class_code, condition)
+    cond_dir = os.path.join(OUTPUT_DIR, class_code, condition)
     stud_file = os.path.join(cond_dir, "students.csv")
     rq_file = os.path.join(cond_dir, "rqted.csv")
     initial_hypo_file = os.path.join(cond_dir, "initialHypo.csv")
