@@ -76,7 +76,7 @@ def write_rq_rec(fp, data):
 def write_brm_steps(class_code, condition, data):
     brm = data['brm']
     brm_hdr = "type,title,selected,isCorrect\n"
-    step_file_name = os.path.join(class_code, condition, "brm", "%s.csv" % data['userID'])
+    step_file_name = os.path.join('output', class_code, condition, "brm", "%s.csv" % data['userID'])
     with open(step_file_name, "w") as fh:
         for step in brm:
             stepCsv = step["type"] + ","
@@ -138,7 +138,7 @@ def write_hypo_data(fp, class_code, which_hypo, data):
     fp.write(line)
 
     # create a seperate *hypo_steps/userID.csv file for the student
-    steps_file = os.path.join(class_code, condition, "%sHypo_steps" % which_hypo, "%s.csv" % userID)
+    steps_file = os.path.join('output', class_code, condition, "%sHypo_steps" % which_hypo, "%s.csv" % userID)
     steps_hdr = "action,object,index,info,date,time\n"
 
     with open(steps_file, "w") as fh:
